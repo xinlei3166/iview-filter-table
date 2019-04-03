@@ -2,7 +2,10 @@
 typora-copy-images-to: ipic
 ---
 
+参考与借鉴：<https://github.com/azhengyongqin/iview-filter-table>
+
 # iview-filter-table
+
 > 一个基于iView Table 的带搜索过滤的Table组件, 支持 Input输入框、Select下拉框、DatePicker时间框三种表格筛选方式.
 
 ## 使用
