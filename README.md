@@ -10,10 +10,9 @@ typora-copy-images-to: ipic
 **模板**：
 
 ```vue
-<filter-table @on-search="onSearch"
-              :data="users"
-              :columns="tableColumns">
-</filter-table>
+<div>
+  <FilterTable :columns="columns" :data="data" @on-search="onSearch"></FilterTable>
+</div>
 ```
 
 **列描述数据对象：**
