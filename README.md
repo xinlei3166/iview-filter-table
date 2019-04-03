@@ -1,3 +1,7 @@
+---
+typora-copy-images-to: ipic
+---
+
 # iview-filter-table
 > 一个基于iView Table 的带搜索过滤的Table组件, 支持 Input输入框、Select下拉框、DatePicker时间框三种表格筛选方式.
 
@@ -149,9 +153,9 @@ ageOptions = {
 
 直接运行该项目可以看当前组件的Table效果。
 
-![image-20190403103056324](/Users/junxi/Library/Application Support/typora-user-images/image-20190403103056324.png)
+![image-20190403103056324](https://ws3.sinaimg.cn/large/006tKfTcly1g1p8yrk8ywj31lo0u0467.jpg)
 
-![image-20190403103126114](/Users/junxi/Library/Application Support/typora-user-images/image-20190403103126114.png)
+![image-20190403103126114](https://ws1.sinaimg.cn/large/006tKfTcly1g1p8yx3385j32dk0f0mza.jpg)
 
 
 
