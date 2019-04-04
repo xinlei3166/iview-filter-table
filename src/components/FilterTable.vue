@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Table :border="border" :height="height" :highlight-row="highlightRow" :no-data-text="noDataText" :no-filtered-data-text="noFilteredDataText" :columns="columns" :data="data"></Table>
+        <Table :border="border" :size="size" :height="height" :highlight-row="highlightRow" :no-data-text="noDataText" :no-filtered-data-text="noFilteredDataText" @on-current-change="onCurrentChange" @on-select="onSelect" @on-select-all="onSelectAll" @on-selection-change="onSelectionChange" :columns="columns" :data="data"></Table>
     </div>
 </template>
 
@@ -12,11 +12,13 @@
         props: {
             columns: {type: Array, required: true},
             data: {type: Array, required: true},
+            size: {type: String, default: 'default'},
             height: {type: Number, default: null},
             highlightRow: {type: Boolean, default: true},
             border: {type: Boolean, default: true},
+            loading: {type: Boolean, default: false},
             noDataText: {type: String, default: '暂无数据'},
-            noFilteredDataText: {type: String, default: '没有找到你要搜索的数据'}
+            noFilteredDataText: {type: String, default: '没有找到你要搜索的数据'},
         }
     })
     export default class FilterTable extends Vue {
@@ -37,9 +39,12 @@
                             return h(this.columns[index].filter.type, {
                                 props: {
                                     value: null,   // Select选项列表一般 0 为全部
+                                    placeholder: this.columns[index].filter.placeholder ? this.columns[index].filter.placeholder : "请选择",
+                                    size: this.columns[index].filter.size ? this.columns[index].filter.size : 'default'
                                 },
                                 style: {
-                                    width: this.columns[index].width ? this.columns[index].width - 40 + 'px': null
+                                    width: this.columns[index].width ? this.columns[index].width - 40 + 'px': null,
+                                    margin: this.columns[index].filter.margin ? this.columns[index].filter.margin : '5px auto'
                                 },
                                 on: {
                                     'on-change': (val) => {
@@ -65,11 +70,14 @@
                             let inputValue = {};
                             return h(this.columns[index].filter.type, {
                                 props: {
-                                    placeholder: '' + this.columns[index].title,
-                                    icon: 'ios-search-strong'
+                                    // icon: 'ios-search'
+                                    type: this.columns[index].filter.stype ? this.columns[index].filter.stype : 'text',
+                                    placeholder: this.columns[index].filter.placeholder ? this.columns[index].filter.placeholder : "",
+                                    size: this.columns[index].filter.size ? this.columns[index].filter.size : 'default'
                                 },
                                 style: {
-                                    width: this.columns[index].width ? this.columns[index].width - 40 + 'px' : null
+                                    width: this.columns[index].width ? this.columns[index].width - 40 + 'px': null,
+                                    margin: this.columns[index].filter.margin ? this.columns[index].filter.margin : '5px auto'
                                 },
                                 on: {
                                     input: val => {
@@ -95,17 +103,29 @@
                             let inputValue = {};
                             return h(this.columns[index].filter.type, {
                                 props: {
-                                    type: "daterange",
+                                    type: this.columns[index].filter.stype ? this.columns[index].filter.stype : "date",
                                     placement: "bottom-end",
-                                    placeholder: "Select date"
+                                    placeholder: this.columns[index].filter.placeholder ? this.columns[index].filter.placeholder : "查询日期",
+                                    size: this.columns[index].filter.size ? this.columns[index].filter.size : 'default'
                                 },
                                 style: {
-                                    width: this.columns[index].width ? this.columns[index].width - 40 + 'px' : null
+                                    width: this.columns[index].width ? this.columns[index].width - 40 + 'px': null,
+                                    margin: this.columns[index].filter.margin ? this.columns[index].filter.margin : '5px auto'
                                 },
                                 on: {
-                                    'on-change': (value) => {
-                                        this.validInputValue(index, value);
+                                    'on-change': (val) => {
+                                        if (!val) {
+                                            this.$delete(this.search, this.columns[index].key);
+                                        } else {
+                                            this.$set(this.search, this.columns[index].key, val);
+                                        }
+                                        this.load();
                                     },
+                                    // 'on-clear': () => {
+                                    //     alert(3)
+                                    //     this.$delete(this.search, this.columns[index].key);
+                                    //     this.load();
+                                    // },
                                 }
                             })
                         };
@@ -113,7 +133,6 @@
                     this.$set(childColumn, 'renderHeader', renderHeader);
                     children.push(childColumn);
                     this.$set(this.columns[index], 'children', children);
-                    this.$delete(this.columns[index], 'key');
                 }
             }
         }
@@ -138,17 +157,37 @@
         load() {
             // 会执行一个load的事件
             this.$emit('on-search', this.search);
+            console.log(this.search)
         }
 
         // 验证输入框的值
         validInputValue(index, inputValue) {
             if (!inputValue) {
+                console.log(index, inputValue);
+                console.log(this.search);
                 this.$delete(this.search, this.columns[index].key);
+                console.log(this.search);
                 this.load();
                 return;
             }
             this.$set(this.search, this.columns[index].key, inputValue);
             this.load();
+        }
+
+        onCurrentChange(currentRow, oldCurrentRow) {
+            this.$emit('on-current-change', currentRow, oldCurrentRow)
+        }
+
+        onSelect(selection) {
+            this.$emit('on-select', selection)
+        }
+
+        onSelectAll(selection) {
+            this.$emit('on-select-all', selection)
+        }
+
+        onSelectionChange(selection) {
+            this.$emit('on-selection-change', selection)
         }
     }
 </script>

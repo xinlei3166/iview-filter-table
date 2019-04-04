@@ -13,6 +13,8 @@
         components: { FilterTable }
     })
     export default class MyTable extends Vue {
+        tableSize = 'default';
+        columnWidth = 300;
 
         ageOptions = {
             0: {
@@ -37,34 +39,61 @@
             {
                 title: "姓名",
                 key: "name",
-                width: 400,
+                width: this.columnWidth,
                 filter: {
-                    type: 'Input'
+                    type: 'Input',
+                    stype: 'text',
+                    placeholder: '请输入姓名',
+                    size: this.tableSize,	// 和table的size尽量一致
+                    margin: '5px auto',
                 }
             },
             {
                 title: "日期",
                 key: "date",
-                width: 400,
+                width: this.columnWidth,
                 filter: {
-                    type: 'DatePicker'
+                    type: 'DatePicker',
+                    stype: 'date',
+                    placeholder: '选择日期',
+                    size: this.tableSize,	// 和table的size尽量一致
+                    margin: '5px auto',
                 }
             },
             {
                 title: "地址",
                 key: "address",
-                width: 400,
+                width: this.columnWidth,
                 filter: {
-                    type: 'Input'
+                    type: 'Input',
+                    stype: 'number',
+                    placeholder: '请输入地址',
+                    size: this.tableSize,	// 和table的size尽量一致
+                    margin: '5px auto',
+                }
+            },
+            {
+                title: "家庭地址",
+                key: "homeAddress",
+                stype: 'text',
+                width: this.columnWidth,
+                filter: {
+                    type: 'Input',
+                    placeholder: '请输入地址',
+                    size: this.tableSize,	// 和table的size尽量一致
+                    margin: '5px auto',
                 }
             },
             {
                 title: "年龄",
                 key: "age",
-                width: 400,
+                width: this.columnWidth,
                 filter: {
                     type: 'Select',
-                    option: this.ageOptions
+                    option: this.ageOptions,
+                    placeholder: '请选择',
+                    size: this.tableSize,	// 和table的size尽量一致
+                    margin: '5px auto',
                 }
             },
             {
@@ -110,49 +139,58 @@
                 name: "John Brown",
                 age: 18,
                 address: "New York No. 1 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             },
             {
                 name: "Jim Green",
                 age: "241111111111112121212212113123123",
                 address: "London No. 1 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             },
             {
                 name: "Joe Black",
                 age: 30,
                 address: "Sydney No. 1 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             },
             {
                 name: "Jon Snow",
                 age: 26,
                 address: "Ottawa No. 2 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             }, {
                 name: "Jon Snow",
                 age: 26,
                 address: "Ottawa No. 2 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             }, {
                 name: "Jon Snow",
                 age: 26,
                 address: "Ottawa No. 2 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             }, {
                 name: "Jon Snow",
                 age: 26,
                 address: "Ottawa No. 2 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             }, {
                 name: "Jon Snow",
                 age: 26,
                 address: "Ottawa No. 2 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             }, {
                 name: "Jon Snow",
                 age: 26,
                 address: "Ottawa No. 2 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             }
         ];
@@ -162,49 +200,58 @@
                 name: "John Brown",
                 age: 18,
                 address: "New York No. 1 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             },
             {
                 name: "Jim Green",
                 age: "241111111111112121212212113123123",
                 address: "London No. 1 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             },
             {
                 name: "Joe Black",
                 age: 30,
                 address: "Sydney No. 1 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             },
             {
                 name: "Jon Snow",
                 age: 26,
                 address: "Ottawa No. 2 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             }, {
                 name: "Jon Snow",
                 age: 26,
                 address: "Ottawa No. 2 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             }, {
                 name: "Jon Snow",
                 age: 26,
                 address: "Ottawa No. 2 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             }, {
                 name: "Jon Snow",
                 age: 26,
                 address: "Ottawa No. 2 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             }, {
                 name: "Jon Snow",
                 age: 26,
                 address: "Ottawa No. 2 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             }, {
                 name: "Jon Snow",
                 age: 26,
                 address: "Ottawa No. 2 Lake Park",
+                homeAddress: "New York No. 1 Lake Park",
                 date: '2019-04-02'
             }
         ];
@@ -225,8 +272,6 @@
         }
 
         screen(item, search) {
-            console.log(item);
-            console.log(search);
             for (let s in search) {
                 if (!item.includes(search[s])) {
                     return
