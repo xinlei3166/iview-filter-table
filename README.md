@@ -21,95 +21,122 @@ typora-copy-images-to: ipic
 **列描述数据对象：**
 
 ```js
-ageOptions = {
-  0: {
-    value: 0,
-    name: '全部'
-  },
-  1: {
-    value: 18,
-    name: '18'
-  },
-  2: {
-    value: 26,
-    name: '26'
-  },
-  3: {
-    value: 30,
-    name: '30'
-  },
-};
+ageOptions = [
+    {
+        value: '',
+        name: '全部'
+    },
+    {
+        value: 18,
+        name: '18'
+    },
+    {
+        value: 26,
+        name: '26'
+    },
+    {
+        value: 30,
+        name: '30'
+    },
+];
 
 columns = [
-  {
-    title: "姓名",
-    key: "name",
-    width: 400,
-    filter: {
-      type: 'Input'
+    {
+        title: "姓名",
+        key: "name",
+        width: this.columnWidth,
+        filter: {
+            type: 'Input',
+            stype: 'text',
+            placeholder: '请输入姓名',
+            size: this.tableSize,	// 和table的size尽量一致
+            margin: '5px auto',
+        }
+    },
+    {
+        title: "日期",
+        key: "date",
+        width: this.columnWidth,
+        filter: {
+            type: 'DatePicker',
+            stype: 'date',
+            placeholder: '选择日期',
+            size: this.tableSize,	// 和table的size尽量一致
+            margin: '5px auto',
+        }
+    },
+    {
+        title: "地址",
+        key: "address",
+        width: this.columnWidth,
+        filter: {
+            type: 'Input',
+            stype: 'text',
+            placeholder: '请输入地址',
+            size: this.tableSize,	// 和table的size尽量一致
+            margin: '5px auto',
+        }
+    },
+    {
+        title: "家庭地址",
+        key: "homeAddress",
+        stype: 'text',
+        width: this.columnWidth,
+        filter: {
+            type: 'Input',
+            placeholder: '请输入地址',
+            size: this.tableSize,	// 和table的size尽量一致
+            margin: '5px auto',
+        }
+    },
+    {
+        title: "年龄",
+        key: "age",
+        width: this.columnWidth,
+        filter: {
+            type: 'Select',
+            options: this.ageOptions,
+            placeholder: '请选择',
+            size: this.tableSize,	// 和table的size尽量一致
+            margin: '5px auto',
+        }
+    },
+    {
+        title: "功能",
+        key: "action",
+        width: 150,
+        align: 'center',
+        fixed: "right",
+        render: (h, params) => {
+            return h("div", [
+                h("Button", {
+                    props: {
+                        type: "primary",
+                        size: "small"
+                    },
+                    style: {
+                        marginRight: "5px"
+                    },
+                    on: {
+                        click: () => {
+                            this.showIndex(params.index)
+                        }
+                    }
+                }, "View"),
+                h("Button", {
+                    props: {
+                        type: "error",
+                        size: "small"
+                    },
+                    on: {
+                        click: () => {
+                            this.removeIndex(params.index)
+                        }
+                    }
+                }, "Delete")
+            ]);
+        }
     }
-  },
-  {
-    title: "日期",
-    key: "date",
-    width: 400,
-    filter: {
-      type: 'DatePicker'
-    }
-  },
-  {
-    title: "地址",
-    key: "address",
-    width: 400,
-    filter: {
-      type: 'Input'
-    }
-  },
-  {
-    title: "年龄",
-    key: "age",
-    width: 400,
-    filter: {
-      type: 'Select',
-      option: this.ageOptions
-    }
-  },
-  {
-    title: "功能",
-    key: "action",
-    width: 150,
-    align: 'center',
-    fixed: "right",
-    render: (h, params) => {
-      return h("div", [
-        h("Button", {
-          props: {
-            type: "primary",
-            size: "small"
-          },
-          style: {
-            marginRight: "5px"
-          },
-          on: {
-            click: () => {
-              this.showIndex(params.index)
-            }
-          }
-        }, "View"),
-        h("Button", {
-          props: {
-            type: "error",
-            size: "small"
-          },
-          on: {
-            click: () => {
-              this.removeIndex(params.index)
-            }
-          }
-        }, "Delete")
-      ]);
-    }
-  }
 ];
 
 ```
@@ -117,24 +144,24 @@ columns = [
 **下拉框数据：**
 
 ```js
-ageOptions = {
-  0: {
-    value: 0,
-    name: '全部'
-  },
-  1: {
-    value: 18,
-    name: '18'
-  },
-  2: {
-    value: 26,
-    name: '26'
-  },
-  3: {
-    value: 30,
-    name: '30'
-  },
-};
+ageOptions = [
+    {
+        value: '',
+        name: '全部'
+    },
+    {
+        value: 18,
+        name: '18'
+    },
+    {
+        value: 26,
+        name: '26'
+    },
+    {
+        value: 30,
+        name: '30'
+    },
+];
 ```
 
 **触发搜索事件：**

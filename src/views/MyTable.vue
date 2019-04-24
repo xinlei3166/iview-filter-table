@@ -16,24 +16,24 @@
         tableSize = 'default';
         columnWidth = 300;
 
-        ageOptions = {
-            0: {
-                value: 0,
+        ageOptions = [
+            {
+                value: '',
                 name: '全部'
             },
-            1: {
+            {
                 value: 18,
                 name: '18'
             },
-            2: {
+            {
                 value: 26,
                 name: '26'
             },
-            3: {
+            {
                 value: 30,
                 name: '30'
             },
-        };
+        ];
 
         columns = [
             {
@@ -66,7 +66,7 @@
                 width: this.columnWidth,
                 filter: {
                     type: 'Input',
-                    stype: 'number',
+                    stype: 'text',
                     placeholder: '请输入地址',
                     size: this.tableSize,	// 和table的size尽量一致
                     margin: '5px auto',
@@ -90,7 +90,7 @@
                 width: this.columnWidth,
                 filter: {
                     type: 'Select',
-                    option: this.ageOptions,
+                    options: this.ageOptions,
                     placeholder: '请选择',
                     size: this.tableSize,	// 和table的size尽量一致
                     margin: '5px auto',
@@ -140,21 +140,21 @@
                 age: 18,
                 address: "New York No. 1 Lake Park",
                 homeAddress: "New York No. 1 Lake Park",
-                date: '2019-04-02'
+                date: '2019-04-05'
             },
             {
                 name: "Jim Green",
                 age: "241111111111112121212212113123123",
                 address: "London No. 1 Lake Park",
                 homeAddress: "New York No. 1 Lake Park",
-                date: '2019-04-02'
+                date: '2019-04-04'
             },
             {
                 name: "Joe Black",
                 age: 30,
                 address: "Sydney No. 1 Lake Park",
                 homeAddress: "New York No. 1 Lake Park",
-                date: '2019-04-02'
+                date: '2019-04-03'
             },
             {
                 name: "Jon Snow",
@@ -201,21 +201,21 @@
                 age: 18,
                 address: "New York No. 1 Lake Park",
                 homeAddress: "New York No. 1 Lake Park",
-                date: '2019-04-02'
+                date: '2019-04-05'
             },
             {
                 name: "Jim Green",
                 age: "241111111111112121212212113123123",
                 address: "London No. 1 Lake Park",
                 homeAddress: "New York No. 1 Lake Park",
-                date: '2019-04-02'
+                date: '2019-04-04'
             },
             {
                 name: "Joe Black",
                 age: 30,
                 address: "Sydney No. 1 Lake Park",
                 homeAddress: "New York No. 1 Lake Park",
-                date: '2019-04-02'
+                date: '2019-04-03'
             },
             {
                 name: "Jon Snow",

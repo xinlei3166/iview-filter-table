@@ -1,6 +1,9 @@
 <template>
     <div>
-        <Table :loading="loading" :border="border" :size="size" :height="height" :highlight-row="highlightRow" :no-data-text="noDataText" :no-filtered-data-text="noFilteredDataText" @on-current-change="onCurrentChange" @on-select="onSelect" @on-select-all="onSelectAll" @on-selection-change="onSelectionChange" :columns="columns" :data="data"></Table>
+        <Table :loading="loading" :border="border" :size="size" :height="height" :highlight-row="highlightRow" :no-data-text="noDataText"
+               :no-filtered-data-text="noFilteredDataText" @on-current-change="onCurrentChange"
+               @on-row-dblclick="onRowDbclick" @on-select="onSelect" @on-select-all="onSelectAll"
+               @on-selection-change="onSelectionChange" :columns="columns" :data="data"></Table>
     </div>
 </template>
 
@@ -26,104 +29,106 @@
         search = {};  //过滤条件保存的对象,就是保存Input框和Select中值
 
         created() {
-            for (let index in this.columns) {
-                let childColumn = {...this.columns[index]};
+            for (let col of this.columns) {
+                let childColumn = {...col};
                 delete childColumn.filter;
                 let children = [];
-                let renderHeader = (h) => {};
+                let renderHeader = (h) => {
+                };
                 // 如果存在过滤选项
-                if (this.columns[index].filter) {
+                if (col.filter) {
                     //过滤为下拉选择框
-                    if (this.columns[index].filter.type && this.columns[index].filter.type === 'Select') {
+                    if (col.filter.type && col.filter.type === 'Select') {
                         renderHeader = (h) => {
-                            return h(this.columns[index].filter.type, {
+                            return h(col.filter.type, {
                                 props: {
-                                    value: null,   // Select选项列表一般 0 为全部
-                                    placeholder: this.columns[index].filter.placeholder ? this.columns[index].filter.placeholder : "请选择",
-                                    size: this.columns[index].filter.size ? this.columns[index].filter.size : 'default'
+                                    value: null,   // Select选项列表一般 '' 或 null 为全部
+                                    placeholder: col.filter.placeholder ? col.filter.placeholder : "请选择",
+                                    size: col.filter.size ? col.filter.size : 'default'
                                 },
                                 style: {
-                                    width: this.columns[index].width ? this.columns[index].width - 40 + 'px': null,
-                                    margin: this.columns[index].filter.margin ? this.columns[index].filter.margin : '5px auto'
+                                    width: col.width ? col.width - 40 + 'px' : null,
+                                    margin: col.filter.margin ? col.filter.margin : '5px auto'
                                 },
                                 on: {
                                     'on-change': (val) => {
-                                        if (val === 0) {
+                                        if (val === '' || val === null) {
                                             // 当选项是全部的时候删除search中该字段的过滤条件
-                                            this.$delete(this.search, this.columns[index].key);
+                                            this.$delete(this.search, col.key);
                                             this.load();
                                             return;
                                         }
                                         //添加字段过滤条件
-                                        this.$set(this.search, this.columns[index].key, val);
+                                        this.$set(this.search, col.key, val);
                                         this.load();
                                     }
                                 }
-                            }, this.createOptionsRender(index, h));
+                            }, this.createOptionsRender(col, h));
                         }
-                    } else if (this.columns[index].filter.type && this.columns[index].filter.type === 'Input') {
+                    } else if (col.filter.type && col.filter.type === 'Input') {
                         // 如果是输入框
                         renderHeader = (h) => {
                             // 通过回车和点击搜索按钮才进行数据过滤查询,如果
                             // 要输入框变化就进行过滤,把 this.load()放到
                             // input事件方法就行了
                             let inputValue = {};
-                            return h(this.columns[index].filter.type, {
+                            return h(col.filter.type, {
                                 props: {
                                     // icon: 'ios-search'
-                                    type: this.columns[index].filter.stype ? this.columns[index].filter.stype : 'text',
-                                    placeholder: this.columns[index].filter.placeholder ? this.columns[index].filter.placeholder : "",
-                                    size: this.columns[index].filter.size ? this.columns[index].filter.size : 'default'
+                                    type: col.filter.stype ? col.filter.stype : 'text',
+                                    placeholder: col.filter.placeholder ? col.filter.placeholder : "",
+                                    size: col.filter.size ? col.filter.size : 'default'
                                 },
                                 style: {
-                                    width: this.columns[index].width ? this.columns[index].width - 40 + 'px': null,
-                                    margin: this.columns[index].filter.margin ? this.columns[index].filter.margin : '5px auto'
+                                    width: col.width ? col.width - 40 + 'px' : null,
+                                    margin: col.filter.margin ? col.filter.margin : '5px auto'
                                 },
                                 on: {
                                     input: val => {
                                         inputValue = val;
                                         if (!inputValue) {
-                                            this.validInputValue(index, inputValue);
+                                            this.validInputValue(col, inputValue);
                                         }
 
                                     },
                                     // input框后面的搜索按钮的点击事件
                                     'on-click': () => {
-                                        this.validInputValue(index, inputValue);
+                                        this.validInputValue(col, inputValue);
                                     },
                                     'on-enter': () => {
-                                        this.validInputValue(index, inputValue);
+                                        this.validInputValue(col, inputValue);
                                     }
                                 }
                             })
                         };
-                    } else if (this.columns[index].filter.type && this.columns[index].filter.type === 'DatePicker') {
+                    } else if (col.filter.type && col.filter.type === 'DatePicker') {
                         // 如果是时间框
                         renderHeader = (h) => {
                             let inputValue = {};
-                            return h(this.columns[index].filter.type, {
+                            return h(col.filter.type, {
                                 props: {
-                                    type: this.columns[index].filter.stype ? this.columns[index].filter.stype : "date",
+                                    type: col.filter.stype ? col.filter.stype : "date",
                                     placement: "bottom-end",
-                                    placeholder: this.columns[index].filter.placeholder ? this.columns[index].filter.placeholder : "查询日期",
-                                    size: this.columns[index].filter.size ? this.columns[index].filter.size : 'default'
+                                    placeholder: col.filter.placeholder ? col.filter.placeholder : "查询日期",
+                                    size: col.filter.size ? col.filter.size : 'default'
                                 },
                                 style: {
-                                    width: this.columns[index].width ? this.columns[index].width - 40 + 'px': null,
-                                    margin: this.columns[index].filter.margin ? this.columns[index].filter.margin : '5px auto'
+                                    width: col.width ? col.width - 40 + 'px' : null,
+                                    margin: col.filter.margin ? col.filter.margin : '5px auto'
                                 },
                                 on: {
                                     'on-change': (val) => {
                                         if (!val) {
-                                            this.$delete(this.search, this.columns[index].key);
+                                            this.$delete(this.search, col.key);
                                         } else {
-                                            this.$set(this.search, this.columns[index].key, val);
+                                            this.$set(this.search, col.key, val);
                                         }
                                         this.load();
+                                        console.log(this.search)
                                     },
                                     // 'on-clear': () => {
                                     //     alert(3)
-                                    //     this.$delete(this.search, this.columns[index].key);
+                                    //     this.$delete(this.search, col.key);
                                     //     this.load();
                                     // },
                                 }
@@ -132,22 +137,22 @@
                     }
                     this.$set(childColumn, 'renderHeader', renderHeader);
                     children.push(childColumn);
-                    this.$set(this.columns[index], 'children', children);
+                    this.$set(col, 'children', children);
                 }
             }
         }
 
-        createOptionsRender(index, h) {
+        createOptionsRender(col, h) {
             // 选项渲染
             let optionRender = [];
-            if (this.columns[index].filter.option) {
-                let option = this.columns[index].filter.option;
-                for (let i in option) {
+            if (col.filter.options) {
+                let options = col.filter.options;
+                for (let option of options) {
                     optionRender.push(h('Option', {
                         props: {
-                            value: option[i].value
+                            value: option.value
                         }
-                    }, option[i].name))
+                    }, option.name))
                 }
             }
             return optionRender;
@@ -157,25 +162,25 @@
         load() {
             // 会执行一个load的事件
             this.$emit('on-search', this.search);
-            console.log(this.search)
         }
 
         // 验证输入框的值
-        validInputValue(index, inputValue) {
+        validInputValue(col, inputValue) {
             if (!inputValue) {
-                console.log(index, inputValue);
-                console.log(this.search);
-                this.$delete(this.search, this.columns[index].key);
-                console.log(this.search);
+                this.$delete(this.search, col.key);
                 this.load();
                 return;
             }
-            this.$set(this.search, this.columns[index].key, inputValue);
+            this.$set(this.search, col.key, inputValue);
             this.load();
         }
 
         onCurrentChange(currentRow, oldCurrentRow) {
             this.$emit('on-current-change', currentRow, oldCurrentRow)
+        }
+
+        onRowDbclick(currentRow, index) {
+            this.$emit('on-row-dblclick', currentRow, index)
         }
 
         onSelect(selection) {
