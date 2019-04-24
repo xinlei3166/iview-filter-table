@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Table :border="border" :size="size" :height="height" :highlight-row="highlightRow" :no-data-text="noDataText" :no-filtered-data-text="noFilteredDataText" @on-current-change="onCurrentChange" @on-select="onSelect" @on-select-all="onSelectAll" @on-selection-change="onSelectionChange" :columns="columns" :data="data"></Table>
+        <Table :loading="loading" :border="border" :size="size" :height="height" :highlight-row="highlightRow" :no-data-text="noDataText" :no-filtered-data-text="noFilteredDataText" @on-current-change="onCurrentChange" @on-select="onSelect" @on-select-all="onSelectAll" @on-selection-change="onSelectionChange" :columns="columns" :data="data"></Table>
     </div>
 </template>
 
